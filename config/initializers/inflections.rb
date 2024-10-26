@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# Be sure to restart your server when you modify this file.
 
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.uncountable %w[anime manga media anime_staff manga_staff drama_staff media_staff]
