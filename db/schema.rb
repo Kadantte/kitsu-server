@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_10_27_091134) do
+ActiveRecord::Schema.define(version: 2024_11_03_040257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -285,6 +285,7 @@ ActiveRecord::Schema.define(version: 2024_10_27_091134) do
     t.jsonb "embed"
     t.string "ao_id"
     t.datetime "hidden_at"
+    t.jsonb "moderation_scores"
     t.index ["ao_id"], name: "index_comments_on_ao_id", unique: true
     t.index ["deleted_at"], name: "index_comments_on_deleted_at"
     t.index ["parent_id"], name: "index_comments_on_parent_id"
@@ -990,6 +991,7 @@ ActiveRecord::Schema.define(version: 2024_10_27_091134) do
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.datetime "hidden_at"
+    t.jsonb "moderation_scores"
     t.index ["anime_id"], name: "index_media_reactions_on_anime_id"
     t.index ["deleted_at"], name: "index_media_reactions_on_deleted_at"
     t.index ["drama_id"], name: "index_media_reactions_on_drama_id"
@@ -1200,6 +1202,7 @@ ActiveRecord::Schema.define(version: 2024_10_27_091134) do
     t.datetime "locked_at"
     t.integer "locked_reason"
     t.datetime "hidden_at"
+    t.jsonb "moderation_scores"
     t.index ["ao_id"], name: "index_posts_on_ao_id", unique: true
     t.index ["community_recommendation_id"], name: "index_posts_on_community_recommendation_id"
     t.index ["deleted_at"], name: "index_posts_on_deleted_at"
@@ -1573,6 +1576,7 @@ ActiveRecord::Schema.define(version: 2024_10_27_091134) do
     t.jsonb "avatar_data"
     t.jsonb "cover_image_data"
     t.integer "sfw_filter_preference", default: 0, null: false
+    t.jsonb "moderation_scores"
     t.index "lower((email)::text)", name: "users_lower_idx"
     t.index "lower((name)::text), id", name: "index_users_on_lower_name_and_id", comment: "Unknown who is querying this, but it is painfully slow without this index"
     t.index ["ao_id"], name: "index_users_on_ao_id", unique: true
