@@ -30,9 +30,9 @@ class Episode < ApplicationRecord
     reorder(nil).sum(:length)
   end
 
-  def self.create_defaults(count)
+  def self.create_defaults(count, **kwargs)
     episodes = ((1..count).to_a - pluck(:number)).map do |n|
-      new(number: n, season_number: 1)
+      new(number: n, season_number: 1, **kwargs)
     end
     transaction { episodes.each(&:save) }
     where("number > #{count}").destroy_all

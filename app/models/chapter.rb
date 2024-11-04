@@ -12,9 +12,9 @@ class Chapter < ApplicationRecord
     order(:volume_number, :number).limit(progress)
   end
 
-  def self.create_defaults(count)
+  def self.create_defaults(count, **kwargs)
     chapters = ((1..count).to_a - pluck(:number)).map do |n|
-      new(number: n, volume_number: 1)
+      new(number: n, volume_number: 1, **kwargs)
     end
     transaction { chapters.each(&:save) }
     where("number > #{count}").destroy_all

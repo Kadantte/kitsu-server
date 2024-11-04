@@ -87,7 +87,7 @@ class Manga < ApplicationRecord
        chapters.length != chapter_count_guess
       chapters.create_defaults(chapter_count_guess || 0)
     elsif saved_change_to_chapter_count? && chapters.length != chapter_count
-      chapters.create_defaults(chapter_count || 0)
+      chapters.create_defaults(chapter_count || 0, status: :validated)
     end
   end
 end

@@ -124,7 +124,7 @@ class Anime < ApplicationRecord
        episodes.length != episode_count_guess
       episodes.create_defaults(episode_count_guess || 0)
     elsif saved_change_to_episode_count? && episodes.length != episode_count
-      episodes.create_defaults(episode_count || 0)
+      episodes.create_defaults(episode_count || 0, status: :validated)
     end
   end
 end
