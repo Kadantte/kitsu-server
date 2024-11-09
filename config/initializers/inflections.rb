@@ -10,4 +10,6 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'AMA'
   inflect.acronym 'ANN'
   inflect.acronym 'MAL'
+  inflect.acronym 'IP'
+  inflect.acronym 'ASN'
 end
