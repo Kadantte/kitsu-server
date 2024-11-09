@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_03_040257) do
+ActiveRecord::Schema.define(version: 2024_11_08_040432) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -510,6 +510,18 @@ ActiveRecord::Schema.define(version: 2024_11_03_040257) do
     t.index ["manga_id"], name: "index_genres_manga_on_manga_id"
   end
 
+  create_table "geonames", primary_key: "geoname_id", id: :serial, force: :cascade do |t|
+    t.string "continent_code"
+    t.string "continent_name"
+    t.string "country_iso_code"
+    t.string "country_name"
+    t.string "subdivision_1_iso_code"
+    t.string "subdivision_1_name"
+    t.string "subdivision_2_iso_code"
+    t.string "subdivision_2_name"
+    t.string "city_name"
+  end
+
   create_table "global_stats", id: :serial, force: :cascade do |t|
     t.string "type", null: false
     t.jsonb "stats_data", default: {}, null: false
@@ -690,6 +702,21 @@ ActiveRecord::Schema.define(version: 2024_11_03_040257) do
     t.integer "alternative_order"
     t.index ["franchise_id"], name: "index_installments_on_franchise_id"
     t.index ["media_type", "media_id"], name: "index_installments_on_media_type_and_media_id"
+  end
+
+  create_table "ip_asns", id: false, force: :cascade do |t|
+    t.inet "start_ip", null: false
+    t.inet "end_ip", null: false
+    t.integer "autonomous_system_number", null: false
+    t.string "autonomous_system_organization", null: false
+    t.index ["start_ip", "end_ip"], name: "ip_asns_b2fes_start_ip_end_ip_idx"
+  end
+
+  create_table "ip_cities", id: false, force: :cascade do |t|
+    t.inet "start_ip", null: false
+    t.inet "end_ip", null: false
+    t.integer "geoname_id", null: false
+    t.index ["start_ip", "end_ip"], name: "ip_cities_rlrfz_start_ip_end_ip_idx"
   end
 
   create_table "leader_chat_messages", id: :serial, force: :cascade do |t|
