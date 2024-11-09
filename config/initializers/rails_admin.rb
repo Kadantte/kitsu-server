@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require Rails.root.join('lib/rails_admin/config/fields/types/localized_string')
 require Rails.root.join('lib/rails_admin/config/fields/types/localized_text')
 require Rails.root.join('lib/rails_admin/config/fields/types/string_list')
@@ -72,7 +74,7 @@ RailsAdmin.config do |config|
         staff: [:person],
         productions: [:company],
         mappings: [],
-        quotes: [:lines, :user]
+        quotes: %i[lines user]
       )
     end
     navigation_label 'Media'
@@ -127,7 +129,7 @@ RailsAdmin.config do |config|
       field :episode_count_guess
       field :total_length, :duration
       field :episode_length, :duration
-      field :episodes
+      field :validated_episodes
     end
     group 'Relationships' do
       field :media_relationships
@@ -148,7 +150,7 @@ RailsAdmin.config do |config|
       :producers, :average_rating, :cover_image_top_offset, :release_schedule,
       :posts, :genres, :anime_staff, :anime_castings, :anime_characters,
       :anime_media_attributes, :media_categories, :reviews, :media_reactions, :franchises,
-      :original_locale, :primary_characters
+      :original_locale, :primary_characters, :episodes
     weight(-20)
   end
   # Manga
@@ -163,7 +165,7 @@ RailsAdmin.config do |config|
         staff: [:person],
         productions: [:company],
         mappings: [],
-        quotes: [:lines, :user]
+        quotes: %i[lines user]
       )
     end
     list do
@@ -215,7 +217,7 @@ RailsAdmin.config do |config|
       field :volume_count
       field :chapter_count_guess
       field :volumes
-      field :chapters
+      field :validated_chapters
     end
     group 'Relationships' do
       field :media_relationships
@@ -234,7 +236,7 @@ RailsAdmin.config do |config|
     exclude_fields :library_entries, :inverse_media_relationships, :favorites,
       :average_rating, :cover_image_top_offset, :release_schedule, :posts,
       :genres, :manga_characters, :manga_staff, :manga_media_attributes, :reviews, :media_reactions,
-      :media_categories, :franchises, :original_locale, :primary_characters
+      :media_categories, :franchises, :original_locale, :primary_characters, :chapters
     weight(-15)
   end
   config.model 'Chapter' do
@@ -244,6 +246,10 @@ RailsAdmin.config do |config|
     field :description, :localized_text
     fields :canonical_title, :number, :published, :volume_number,
       :length, :thumbnail
+    field :status, :enum do
+      default_value 'validated'
+      hide
+    end
     include_all_fields
   end
   config.model 'Volume' do
@@ -435,6 +441,10 @@ RailsAdmin.config do |config|
     field :description, :localized_text
     fields :number, :relative_number, :season_number, :airdate, :thumbnail
     field :length, :duration
+    field :status, :enum do
+      default_value 'validated'
+      hide
+    end
     include_all_fields
   end
 
