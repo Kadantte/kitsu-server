@@ -13,6 +13,9 @@ class Manga < ApplicationRecord
 
   has_many :volumes, dependent: :destroy, inverse_of: :manga
   has_many :chapters, dependent: :destroy, inverse_of: :manga
+  has_many :validated_chapters, -> {
+    where(status: :validated).order(number: :asc)
+  }, class_name: 'Chapter', inverse_of: :manga, dependent: nil
   has_many :manga_characters, dependent: :destroy
   has_many :manga_staff, dependent: :destroy
   has_many :manga_media_attributes

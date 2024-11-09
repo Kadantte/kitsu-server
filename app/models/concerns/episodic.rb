@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Episodic
   extend ActiveSupport::Concern
 
@@ -33,6 +35,9 @@ module Episodic
       as: 'media',
       dependent: :destroy,
       inverse_of: 'media'
+    has_many :validated_episodes, -> {
+      where(status: :validated).order(number: :asc)
+    }, as: 'media', class_name: 'Episode', inverse_of: 'media', dependent: nil
     has_many :streaming_links, as: 'media', dependent: :destroy
     alias_attribute :progress_limit, :episode_count
 
