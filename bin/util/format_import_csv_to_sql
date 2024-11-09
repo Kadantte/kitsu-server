@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+require 'securerandom'
+
+# This script takes a CSV file on STDIN and outputs a SQL script that will import the CSV into a new
+# table with the same schema as the specified base table, then safely hot-swap the new table in for
+# the base table before deleting it. This allows us to import a whole dataset in one go without
+# locking the table for reads.
+
+base_table = ARGV[0]
+new_table = "#{base_table}_#{SecureRandom.alphanumeric(5)}"
+old_table = "#{new_table}_old"
+
+def tee(str)
+  $stdout.puts str
+  $stderr.puts str
+end
+
+tee "BEGIN;"
+
+tee "CREATE TABLE #{new_table} (LIKE #{base_table} INCLUDING ALL);"
+tee "COPY public.#{new_table} FROM stdin WITH (FORMAT csv, FREEZE true);"
+
+$stdin.each_line { |line| puts line }
+
+puts "\\."
+
+tee "ALTER TABLE #{base_table} RENAME TO #{old_table};"
+tee "ALTER TABLE #{new_table} RENAME TO #{base_table};"
+tee "DROP TABLE #{old_table} CASCADE;"
+
+tee "COMMIT;"

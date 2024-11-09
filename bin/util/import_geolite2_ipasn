@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -e
+
+cd "$(dirname "$0")"
+
+./format_geolite2_ipasn_csv "$@" | ./format_import_csv_to_sql ip_asns | (
+  cd ../../ && ./bin/rails dbconsole
+)

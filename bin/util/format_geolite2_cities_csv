@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+require 'csv'
+require 'ipaddr'
+
+ARGV.each do |file|
+  CSV.open(file, 'r', headers: true).each do |row|
+    network = IPAddr.new(row['network']).to_range
+    next if row['geoname_id'].nil?
+    puts CSV.generate_line([
+      network.begin,
+      network.end,
+      row['geoname_id']
+    ])
+  end
+end

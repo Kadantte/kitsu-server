@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -e
+
+cd "$(dirname "$0")"
+
+auth="$1"
+
+function download_geolite2() {
+  set -e
+  local tmpfile
+  local tmpdir
+  tmpfile="$(mktemp -u)"
+  tmpdir="$(mktemp -d)"
+  curl -o "$tmpfile" -J -L -u "$auth" --fail-with-body\
+    "https://download.maxmind.com/geoip/databases/GeoLite2-$1-CSV/download?suffix=zip" >&2
+  unzip "$tmpfile" -d "$tmpdir" >&2
+  rm "$tmpfile"
+  echo "$tmpdir"/GeoLite2-"$1"-CSV_*/
+}
+
+citydir=$(download_geolite2 City)
+asndir=$(download_geolite2 ASN)
+
+./import_geolite2_cities "$citydir"/GeoLite2-City-Blocks-IPv{4,6}.csv
+./import_geolite2_locations "$citydir"/GeoLite2-City-Locations-en.csv
+./import_geolite2_ipasn "$asndir"/GeoLite2-ASN-Blocks-IPv{4,6}.csv

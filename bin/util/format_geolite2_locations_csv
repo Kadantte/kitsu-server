@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+require 'csv'
+
+ARGV.each do |file|
+  CSV.open(file, 'r', headers: true).each do |row|
+    puts CSV.generate_line([
+      row['geoname_id'],
+      row['continent_code'],
+      row['continent_name'],
+      row['country_iso_code'],
+      row['country_name'],
+      row['subdivision_1_iso_code'],
+      row['subdivision_1_name'],
+      row['subdivision_2_iso_code'],
+      row['subdivision_2_name'],
+      row['city_name'],
+    ])
+  end
+end
