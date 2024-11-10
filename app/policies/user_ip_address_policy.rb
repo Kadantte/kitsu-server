@@ -1,4 +1,6 @@
-class UserIpAddressPolicy < ApplicationPolicy
+# frozen_string_literal: true
+
+class UserIPAddressPolicy < ApplicationPolicy
   administrated_by :community_mod
 
   def update?

@@ -177,7 +177,7 @@ class User < ApplicationRecord
   has_many :notification_settings, dependent: :delete_all
   has_many :one_signal_players, dependent: :delete_all
   has_many :reposts, dependent: :destroy
-  has_many :ip_addresses, dependent: :delete_all, class_name: 'UserIpAddress'
+  has_many :ip_addresses, dependent: :delete_all, class_name: 'UserIPAddress'
   has_many :category_favorites, dependent: :delete_all
   has_many :quotes, dependent: :nullify
   has_many :wiki_submissions
@@ -360,8 +360,8 @@ class User < ApplicationRecord
     alts = {}
     user_ips = ip_addresses.select(:ip_address)
     user_ip_count = user_ips.count
-    shared_ips = UserIpAddress.where(ip_address: user_ips).where.not(user: self).includes(:user)
-    alt_ip_counts = UserIpAddress.where(user_id: shared_ips.select(:user_id)).group(:user_id).count
+    shared_ips = UserIPAddress.where(ip_address: user_ips).where.not(user: self).includes(:user)
+    alt_ip_counts = UserIPAddress.where(user_id: shared_ips.select(:user_id)).group(:user_id).count
 
     shared_ips.group(:user).count.each do |alt, shared_ips_count|
       alts[alt] = shared_ips_count.to_f / [[user_ip_count, alt_ip_counts[alt.id]].min, 2].max

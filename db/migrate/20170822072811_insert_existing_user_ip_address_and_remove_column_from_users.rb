@@ -6,7 +6,7 @@ class InsertExistingUserIpAddressAndRemoveColumnFromUsers < ActiveRecord::Migrat
         return puts "BAD IP: #{ip} for #{user.id}" unless ip.is_a?(IPAddr)
         {ip_address: ip, user_id: user.id}
       end
-      UserIpAddress.create!(ips.compact)
+      UserIPAddress.create!(ips.compact)
     end
     remove_column :users, :ip_addresses, :inet
   end

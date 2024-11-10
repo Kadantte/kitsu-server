@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UserIpAddress < ApplicationRecord
+class UserIPAddress < ApplicationRecord
   belongs_to :user, optional: false
 
   validates :ip_address, presence: true
