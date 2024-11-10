@@ -12,7 +12,7 @@ module MaintainIPAddresses
       [nil, request.remote_ip],
       [nil, Time.current]
     ]
-    UserIpAddress.connection.exec_update(<<~SQL.squish, 'SQL', binds)
+    UserIPAddress.connection.exec_update(<<~SQL.squish, 'SQL', binds)
       INSERT INTO user_ip_addresses (user_id, ip_address, created_at, updated_at)
         VALUES ($1, $2, $3, $3)
       ON CONFLICT (user_id, ip_address)
