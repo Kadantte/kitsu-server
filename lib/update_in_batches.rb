@@ -4,7 +4,7 @@ module UpdateInBatches
   # rubocop:disable all
   refine ActiveRecord::Relation do
     def update_in_batches(updates = {}, of: 10000, **kwargs)
-      updates = updates.merge(kwargs)
+      updates = updates.merge(kwargs) if updates.is_a?(Hash)
       relation = self
       relation = relation.reorder(batch_order).limit(of)
       batch_relation = relation
