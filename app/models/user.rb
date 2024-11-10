@@ -100,12 +100,6 @@
 #  fk_rails_bc615464bf  (pinned_post_id => posts.id)
 #
 class User < ApplicationRecord
-  self.ignored_columns += %w[
-    remember_created_at sign_in_count current_sign_in_at last_sign_in_at recommendations_up_to_date
-    ninja_banned last_recommendations_update dropbox_token dropbox_secret approved_edit_count
-    rejected_edit_count last_backup import_status import_from import_error ip_addresses
-  ]
-
   include AvatarUploader::Attachment(:avatar)
   include CoverImageUploader::Attachment(:cover_image)
 
