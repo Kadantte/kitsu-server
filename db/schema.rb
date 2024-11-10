@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_08_040432) do
+ActiveRecord::Schema.define(version: 2024_11_09_052107) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -510,7 +510,7 @@ ActiveRecord::Schema.define(version: 2024_11_08_040432) do
     t.index ["manga_id"], name: "index_genres_manga_on_manga_id"
   end
 
-  create_table "geonames", primary_key: "geoname_id", id: :serial, force: :cascade do |t|
+  create_table "geonames", primary_key: "geoname_id", id: :integer, default: nil, force: :cascade do |t|
     t.string "continent_code"
     t.string "continent_name"
     t.string "country_iso_code"
@@ -709,14 +709,22 @@ ActiveRecord::Schema.define(version: 2024_11_08_040432) do
     t.inet "end_ip", null: false
     t.integer "autonomous_system_number", null: false
     t.string "autonomous_system_organization", null: false
-    t.index ["start_ip", "end_ip"], name: "ip_asns_b2fes_start_ip_end_ip_idx"
+    t.index ["start_ip", "end_ip"], name: "ip_asns_exnos_start_ip_end_ip_idx"
   end
 
   create_table "ip_cities", id: false, force: :cascade do |t|
     t.inet "start_ip", null: false
     t.inet "end_ip", null: false
     t.integer "geoname_id", null: false
-    t.index ["start_ip", "end_ip"], name: "ip_cities_rlrfz_start_ip_end_ip_idx"
+    t.index ["start_ip", "end_ip"], name: "ip_cities_fgq13_start_ip_end_ip_idx"
+  end
+
+  create_table "ip_filters", force: :cascade do |t|
+    t.integer "type", null: false
+    t.text "pattern", null: false
+    t.integer "actions", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "leader_chat_messages", id: :serial, force: :cascade do |t|
