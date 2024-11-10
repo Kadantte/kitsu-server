@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module MaintainIpAddresses
+module MaintainIPAddresses
   extend ActiveSupport::Concern
 
   def maintain_ip_addresses
