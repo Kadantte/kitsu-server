@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PostPolicy < ApplicationPolicy
   administrated_by :community_mod
   include GroupPermissionsHelpers
@@ -11,11 +13,12 @@ class PostPolicy < ApplicationPolicy
     is_owner?
   end
 
-  def create? # rubocop:disable Metrics/PerceivedComplexity
+  def create?
     return false unless user
     return false if user.unregistered?
     return false if user.blocked?(record.target_user)
     return false if user.has_role?(:banned)
+    return false if user.flags.banned?
     if group
       return false if banned_from_group?
       return false if group.restricted? && !has_group_permission?(:content)

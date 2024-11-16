@@ -128,6 +128,7 @@ class User < ApplicationRecord
 
   rolify
   flag :permissions, %i[admin community_mod database_mod]
+  flag :flags, %i[require_email_validation banned shadow_banned]
   has_secure_password validations: false
   update_index('users#user') { self }
   update_algolia('AlgoliaUsersIndex')
