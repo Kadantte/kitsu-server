@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_09_052107) do
+ActiveRecord::Schema.define(version: 2024_11_15_224430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -1612,6 +1612,7 @@ ActiveRecord::Schema.define(version: 2024_11_09_052107) do
     t.jsonb "cover_image_data"
     t.integer "sfw_filter_preference", default: 0, null: false
     t.jsonb "moderation_scores"
+    t.integer "flags", default: 0, null: false
     t.index "lower((email)::text)", name: "users_lower_idx"
     t.index "lower((name)::text), id", name: "index_users_on_lower_name_and_id", comment: "Unknown who is querying this, but it is painfully slow without this index"
     t.index ["ao_id"], name: "index_users_on_ao_id", unique: true
