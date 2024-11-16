@@ -1,4 +1,4 @@
-class CreateIpCities < ActiveRecord::Migration[6.1]
+class CreateIPCities < ActiveRecord::Migration[6.1]
   def change
     create_table :ip_cities, id: false do |t|
       t.inet :start_ip, null: false
