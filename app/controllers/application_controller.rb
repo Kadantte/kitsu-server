@@ -64,4 +64,11 @@ class ApplicationController < JSONAPI::ResourceController
       )
     end
   end
+
+  def context
+    {
+      current_user:,
+      remote_ip: request.remote_ip
+    }
+  end
 end

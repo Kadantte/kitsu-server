@@ -87,6 +87,13 @@ class UserResource < BaseResource
     @model.destroy_later
   end
 
+  before_save do
+    # If the user is new and the IP filter requires email validation, set the flag
+    if IPFilter.by_ip(context[:remote_ip]).take_action?(:require_email_validation) && @model.new_record?
+      @model.flags.set(:require_email_validation)
+    end
+  end
+
   filter :slug
   filter :name, apply: ->(records, value, _o) { records.by_name(value.first) }
   filter :self, apply: ->(records, _v, options) {
