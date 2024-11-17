@@ -40,6 +40,9 @@ class MangaSearchService < TypesenseSearchService
           'alternative_titles' => 90,
           'descriptions.*' => 80
         }
+      ).set(
+        prioritize_token_position: true,
+        prioritize_num_matching_fields: false
       )
       query = apply_filters_to(query)
       query = apply_order_to(query)
