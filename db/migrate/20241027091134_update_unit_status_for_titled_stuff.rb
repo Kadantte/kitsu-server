@@ -1,5 +1,6 @@
 class UpdateUnitStatusForTitledStuff < ActiveRecord::Migration[6.1]
   using UpdateInBatches
+  self.disable_ddl_transaction!
 
   def change
     Episode.where("titles->canonical_title !~ '^Episode \d+$'")
