@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LibraryEntryResource < BaseResource
   TITLE_SORT = /\A([^\.]+)\.titles\.([^\.]+)\z/
 
@@ -14,7 +16,7 @@ class LibraryEntryResource < BaseResource
       media, title = match[1..-1]
       return false unless %w[anime manga drama].include?(media.downcase)
       return true if title.casecmp('canonical')
-      return false unless /[a-z]{2}(_[a-z]{2})?/ =~ title
+      return false unless /[a-z]{2}(_[a-z]{2})?/.match?(title)
       true
     end
   end
@@ -26,6 +28,7 @@ class LibraryEntryResource < BaseResource
     :drama_id
 
   filter :status, apply: ->(records, values, _options) {
+    values = values.map(&:underscore)
     statuses = LibraryEntry.statuses.values_at(*values).compact
     statuses = values if statuses.empty?
     records.where(status: statuses)
@@ -96,7 +99,7 @@ class LibraryEntryResource < BaseResource
   def self.apply_sort(records, order_options, context = {})
     # For each requested sort option, decide whether to use the title sort logic
     order_options = order_options.map do |field, dir|
-      [(TITLE_SORT =~ field ? :title : :other), field, dir]
+      [(TITLE_SORT.match?(field) ? :title : :other), field, dir]
     end
     # Combine consecutive sort options of the same type into lists
     order_options = order_options.each_with_object([]) do |curr, acc|
@@ -107,10 +110,10 @@ class LibraryEntryResource < BaseResource
     # Send each list to either apply_title_sort or super
     order_options.each do |(type, sorts)|
       records = if type == :title
-                  apply_title_sort(records, sorts, context)
-                else
-                  super(records, sorts, context)
-                end
+        apply_title_sort(records, sorts, context)
+      else
+        super(records, sorts, context)
+      end
     end
     records
   end
@@ -129,7 +132,7 @@ class LibraryEntryResource < BaseResource
         records = records.order(Arel.sql(<<~ORDER))
           #{media}_sort.titles->#{media}_sort.canonical_title #{direction}
         ORDER
-      elsif /[a-z]{2}(_[a-z]{2})?/i =~ title
+      elsif /[a-z]{2}(_[a-z]{2})?/i.match?(title)
         records = records.order(Arel.sql(<<~ORDER.squish))
           COALESCE(
             NULLIF(#{media}_sort.titles->'#{title}', ''),
