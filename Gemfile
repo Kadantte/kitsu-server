@@ -87,6 +87,7 @@ gem 'iso_country_codes' # Country codes
 gem 'lograge' # Better logging
 gem 'mechanize' # Automating interaction with websites
 gem 'nokogiri' # Parse MAL XML shit
+gem 'oauth2' # Authenticate to Nyckel API
 gem 'one_signal' # Send push notifications
 gem 'paranoia', '~> 2.4' # Faux deletion
 gem 'postmark-rails' # Send via Postmark
