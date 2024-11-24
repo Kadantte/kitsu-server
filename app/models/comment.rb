@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 class Comment < ApplicationRecord
   include WithActivity
   include ContentProcessable
   include ContentEmbeddable
+  include Holdable
   WordfilterCallbacks.hook(self, :comment, :content)
 
   acts_as_paranoid
@@ -12,12 +15,12 @@ class Comment < ApplicationRecord
   processable :content, LongPipeline
   embed_links_in :content, to: :embed
 
-  belongs_to :user, required: true
-  belongs_to :post, required: true, counter_cache: true, touch: true
+  belongs_to :user, optional: false
+  belongs_to :post, optional: false, counter_cache: true, touch: true
   belongs_to :parent, class_name: 'Comment', optional: true,
-                      counter_cache: 'replies_count', touch: true
+    counter_cache: 'replies_count', touch: true
   has_many :replies, class_name: 'Comment', foreign_key: 'parent_id',
-                     dependent: :destroy
+    dependent: :destroy
   has_many :likes, class_name: 'CommentLike', dependent: :destroy
   has_many :uploads, as: 'owner', dependent: :destroy
 
@@ -45,11 +48,11 @@ class Comment < ApplicationRecord
     to << post.comments_feed
     to.compact!
     post.feed.activities.new(
-      reply_to_user: (parent&.user || post&.user),
+      reply_to_user: parent&.user || post&.user,
       reply_to_type: (parent.present? ? 'comment' : 'post'),
-      likes_count: likes_count,
-      replies_count: replies_count,
-      post_id: post_id,
+      likes_count:,
+      replies_count:,
+      post_id:,
       target: post,
       mentioned_users: mentioned_users.pluck(:id),
       to: to - [user.notifications]

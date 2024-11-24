@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_15_224430) do
+ActiveRecord::Schema.define(version: 2024_11_24_034122) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -286,6 +286,7 @@ ActiveRecord::Schema.define(version: 2024_11_15_224430) do
     t.string "ao_id"
     t.datetime "hidden_at"
     t.jsonb "moderation_scores"
+    t.integer "held_reason"
     t.index ["ao_id"], name: "index_comments_on_ao_id", unique: true
     t.index ["deleted_at"], name: "index_comments_on_deleted_at"
     t.index ["parent_id"], name: "index_comments_on_parent_id"
@@ -1027,6 +1028,7 @@ ActiveRecord::Schema.define(version: 2024_11_15_224430) do
     t.datetime "deleted_at"
     t.datetime "hidden_at"
     t.jsonb "moderation_scores"
+    t.integer "held_reason"
     t.index ["anime_id"], name: "index_media_reactions_on_anime_id"
     t.index ["deleted_at"], name: "index_media_reactions_on_deleted_at"
     t.index ["drama_id"], name: "index_media_reactions_on_drama_id"
@@ -1238,6 +1240,7 @@ ActiveRecord::Schema.define(version: 2024_11_15_224430) do
     t.integer "locked_reason"
     t.datetime "hidden_at"
     t.jsonb "moderation_scores"
+    t.integer "held_reason"
     t.index ["ao_id"], name: "index_posts_on_ao_id", unique: true
     t.index ["community_recommendation_id"], name: "index_posts_on_community_recommendation_id"
     t.index ["deleted_at"], name: "index_posts_on_deleted_at"

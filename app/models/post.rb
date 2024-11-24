@@ -4,6 +4,7 @@ class Post < ApplicationRecord
   include WithActivity
   include ContentProcessable
   include ContentEmbeddable
+  include Holdable
   WordfilterCallbacks.hook(self, :post, :content)
 
   acts_as_paranoid
@@ -34,7 +35,9 @@ class Post < ApplicationRecord
     where(target_group_id: Group.visible_for(user))
       .or(where(target_group_id: nil))
       .where(hidden_at: nil)
+      .not_held
       .or(where(user_id: user).where.not(hidden_at: nil))
+      .or(where(user_id: user).held)
   }
 
   validates :content, :content_formatted, presence: true, unless: :uploads

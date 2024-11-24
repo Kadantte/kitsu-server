@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MediaReactionPolicy < ApplicationPolicy
   administrated_by :community_mod
 
@@ -25,7 +27,10 @@ class MediaReactionPolicy < ApplicationPolicy
     def resolve
       scope
         .where.not(user_id: blocked_users)
-        .where(hidden_at: nil).or(scope.where(user_id: user).where.not(hidden_at: nil))
+        .not_held
+        .where(hidden_at: nil)
+        .or(scope.where(user_id: user).where.not(hidden_at: nil))
+        .or(scope.where(user_id: user).held)
     end
   end
 end
