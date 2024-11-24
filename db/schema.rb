@@ -289,6 +289,7 @@ ActiveRecord::Schema.define(version: 2024_11_24_034122) do
     t.integer "held_reason"
     t.index ["ao_id"], name: "index_comments_on_ao_id", unique: true
     t.index ["deleted_at"], name: "index_comments_on_deleted_at"
+    t.index ["held_reason"], name: "index_comments_on_held_reason"
     t.index ["parent_id"], name: "index_comments_on_parent_id"
     t.index ["post_id"], name: "index_comments_on_post_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
@@ -1032,6 +1033,7 @@ ActiveRecord::Schema.define(version: 2024_11_24_034122) do
     t.index ["anime_id"], name: "index_media_reactions_on_anime_id"
     t.index ["deleted_at"], name: "index_media_reactions_on_deleted_at"
     t.index ["drama_id"], name: "index_media_reactions_on_drama_id"
+    t.index ["held_reason"], name: "index_media_reactions_on_held_reason"
     t.index ["library_entry_id"], name: "index_media_reactions_on_library_entry_id"
     t.index ["manga_id"], name: "index_media_reactions_on_manga_id"
     t.index ["media_type", "media_id", "user_id"], name: "index_media_reactions_on_media_type_and_media_id_and_user_id", unique: true, where: "(deleted_at IS NULL)"
@@ -1244,6 +1246,7 @@ ActiveRecord::Schema.define(version: 2024_11_24_034122) do
     t.index ["ao_id"], name: "index_posts_on_ao_id", unique: true
     t.index ["community_recommendation_id"], name: "index_posts_on_community_recommendation_id"
     t.index ["deleted_at"], name: "index_posts_on_deleted_at"
+    t.index ["held_reason"], name: "index_posts_on_held_reason"
     t.index ["locked_by_id"], name: "index_posts_on_locked_by_id"
     t.index ["media_type", "media_id"], name: "posts_media_type_media_id_idx"
     t.index ["target_group_id"], name: "posts_target_group_id_idx"
