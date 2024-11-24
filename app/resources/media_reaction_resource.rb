@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class MediaReactionResource < BaseResource
-  attributes :reaction, :up_votes_count
+  attributes :reaction, :up_votes_count, :held_reason
 
   has_one :anime
   has_one :drama

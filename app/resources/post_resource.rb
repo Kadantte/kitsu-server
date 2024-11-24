@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PostResource < BaseResource
   caching
   IMMUTABLE_ATTRIBUTES = %i[locked_at locked_reason].freeze
@@ -5,7 +7,7 @@ class PostResource < BaseResource
 
   attributes :content, :content_formatted, :comments_count, :post_likes_count,
     :spoiler, :nsfw, :blocked, :deleted_at, :top_level_comments_count,
-    :edited_at, :target_interest, :embed, :embed_url
+    :edited_at, :target_interest, :embed, :embed_url, :held_reason
 
   attributes(*IMMUTABLE_ATTRIBUTES)
 

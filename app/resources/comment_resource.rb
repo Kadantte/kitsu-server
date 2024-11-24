@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class CommentResource < BaseResource
   caching
 
   attributes :content, :content_formatted, :blocked, :deleted_at, :likes_count,
-    :replies_count, :edited_at, :embed, :embed_url
+    :replies_count, :edited_at, :embed, :embed_url, :held_reason
 
   has_one :user
   has_one :post
