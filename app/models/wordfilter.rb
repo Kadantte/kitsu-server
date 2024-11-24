@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 class Wordfilter < ApplicationRecord
   flag :locations, %i[post comment reaction]
   enum action: {
     censor: 10,
     report: 20,
+    hold: 25,
     hide: 30,
     reject: 40
   }, _prefix: 'action_'
@@ -15,7 +18,8 @@ class Wordfilter < ApplicationRecord
 
   scope :matching, ->(text) {
     # Match regexes with ~* (replacing \b with \y) and create an exact match via ILIKE
-    where("? ~* ('.*' || replace(pattern, '\\b', '\\y') || '.*')", text).where(regex_enabled: true)
+    where("? ~* ('.*' || replace(pattern, '\\b', '\\y') || '.*')", text)
+      .where(regex_enabled: true)
       .or(where("? ILIKE ('%' || pattern || '%')", text).where(regex_enabled: false))
   }
 

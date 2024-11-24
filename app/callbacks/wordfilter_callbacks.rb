@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class WordfilterCallbacks < InstancedCallbacks
   # @param klass [Class] the class to hook the callbacks for
   # @param location [Symbol] the wordfilter location name
   # @param content_field [Symbol] the field on this class which stores the content
   def self.hook(klass, location, content_field)
-    super(klass, { location: location, content_field: content_field })
+    super(klass, { location:, content_field: })
 
     attach_callback(klass, :before_validation)
     attach_callback(klass, :after_save)
@@ -12,6 +14,7 @@ class WordfilterCallbacks < InstancedCallbacks
   def before_validation
     record.send(:"#{options.content_field}=", wordfilter.censored_text) if wordfilter.censor?
     record.hidden_at = Time.now if wordfilter.hide?
+    record.held_reason = :wordfilter if wordfilter.hold?
     record.errors.add options.content_field, 'contains an inappropriate word' if wordfilter.reject?
   end
 

@@ -1,7 +1,13 @@
+# frozen_string_literal: true
+
 class WordfilterService
   def initialize(location, text)
     @location = location
     @text = text&.unicode_normalize
+  end
+
+  def hold?
+    wordfilters[:hold].present?
   end
 
   def reject?
@@ -28,8 +34,9 @@ class WordfilterService
     wordfilters[:censor].inject(@text) do |text, wordfilter|
       # Convert SQL LIKE roughly into Regex
       pattern = if wordfilter.regex_enabled? then wordfilter.pattern
-                else wordfilter.pattern.gsub('.', '\.').gsub('%', '.*').tr('_', '.')
-                end
+      else
+        wordfilter.pattern.gsub('.', '\.').gsub('%', '.*').tr('_', '.')
+      end
       pattern = Regexp.new(pattern, Regexp::IGNORECASE)
 
       text.gsub(pattern, 'CENSORED')
