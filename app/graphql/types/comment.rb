@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Types::Comment < Types::BaseObject
   implements Types::Interface::WithTimestamps
 
@@ -26,6 +28,10 @@ class Types::Comment < Types::BaseObject
     null: true,
     description: 'The parent comment if this comment was a reply to another.'
 
+  field :held_reason, Types::Enum::HeldReason,
+    null: true,
+    description: 'The reason why this comment is held for manual moderator approval.'
+
   field :likes, Types::Profile.connection_type, null: false do
     description 'Users who liked this comment'
     argument :sort, Loaders::CommentLikesLoader.sort_argument, required: false
@@ -34,7 +40,7 @@ class Types::Comment < Types::BaseObject
   def likes(sort: [{ on: :created_at, direction: :desc }])
     Loaders::CommentLikesLoader.connection_for({
       find_by: :comment_id,
-      sort: sort
+      sort:
     }, object.id).then do |likes|
       Loaders::RecordLoader.for(User, token: context[:token]).load_many(likes.map(&:user_id))
     end
@@ -48,7 +54,7 @@ class Types::Comment < Types::BaseObject
   def replies(sort: [{ on: :created_at, direction: :asc }])
     Loaders::CommentsLoader.connection_for({
       find_by: :parent_id,
-      sort: sort
+      sort:
     }, object.id)
   end
 end

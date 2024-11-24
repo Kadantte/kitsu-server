@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Types::Post < Types::BaseObject
   implements Types::Interface::WithTimestamps
 
@@ -44,6 +46,10 @@ class Types::Post < Types::BaseObject
     null: true,
     description: 'The reason why this post was locked.'
 
+  field :held_reason, Types::Enum::HeldReason,
+    null: true,
+    description: 'The reason why this post is held for manual moderator approval.'
+
   field :comments, Types::Comment.connection_type, null: false do
     description 'All comments on this post'
     argument :sort, Loaders::CommentsLoader.sort_argument, required: false
@@ -52,7 +58,7 @@ class Types::Post < Types::BaseObject
   def comments(sort: [{ on: :created_at, direction: :asc }])
     Loaders::CommentsLoader.connection_for({
       find_by: :post_id,
-      sort: sort,
+      sort:,
       where: { parent_id: nil }
     }, object.id)
   end
@@ -65,7 +71,7 @@ class Types::Post < Types::BaseObject
   def likes(sort: [{ on: :created_at, direction: :desc }])
     Loaders::PostLikesLoader.connection_for({
       find_by: :post_id,
-      sort: sort
+      sort:
     }, object.id).then do |likes|
       Loaders::RecordLoader.for(User, token: context[:token]).load_many(likes.map(&:user_id))
     end

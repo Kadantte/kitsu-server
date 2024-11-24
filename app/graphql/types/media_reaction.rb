@@ -41,6 +41,10 @@ class Types::MediaReaction < Types::BaseObject
     null: false,
     description: 'The reaction text related to a media.'
 
+  field :held_reason, Types::Enum::HeldReason,
+    null: true,
+    description: 'The reason why this reaction is held for manual moderator approval.'
+
   field :likes, Types::Profile.connection_type, null: false do
     description 'Users that have liked this reaction'
     argument :sort, Loaders::MediaReactionVotesLoader.sort_argument, required: false
