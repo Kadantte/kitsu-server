@@ -47,6 +47,8 @@ class CommentPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
+      return scope if can_administrate?
+
       scope
         .where.not(user_id: blocked_users)
         .not_held
