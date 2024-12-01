@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_24_071050) do
+ActiveRecord::Schema.define(version: 2024_11_26_080616) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -1846,5 +1846,24 @@ ActiveRecord::Schema.define(version: 2024_11_24_071050) do
       ms.created_at,
       ms.updated_at
      FROM media_staff ms;
+  SQL
+  create_view "held_items", sql_definition: <<-SQL
+      SELECT 'Post'::text AS type,
+      posts.id,
+      posts.created_at
+     FROM posts
+    WHERE (posts.held_reason IS NOT NULL)
+  UNION ALL
+   SELECT 'Comment'::text AS type,
+      comments.id,
+      comments.created_at
+     FROM comments
+    WHERE (comments.held_reason IS NOT NULL)
+  UNION ALL
+   SELECT 'MediaReaction'::text AS type,
+      media_reactions.id,
+      media_reactions.created_at
+     FROM media_reactions
+    WHERE (media_reactions.held_reason IS NOT NULL);
   SQL
 end
