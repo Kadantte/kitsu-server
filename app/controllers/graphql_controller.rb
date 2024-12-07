@@ -8,6 +8,7 @@ class GraphqlController < ApplicationController
     context = {
       token: current_user,
       user: current_user&.resource_owner,
+      site_permissions: current_user&.permissions || [],
       accept_languages:
     }
     result = KitsuSchema.execute(query,
