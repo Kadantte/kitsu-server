@@ -462,6 +462,15 @@ class Types::QueryType < GraphQL::Schema::Object
     }, statuses)
   end
 
+  field :held_for_moderation, Types::Interface::Holdable.connection_type, null: true do
+    description 'All items currently held for moderation in the Kitsu database'
+    directive Directives::SitePermission, required: 'community_mod'
+  end
+
+  def held_for_moderation
+    Connections::HoldableConnection.new
+  end
+
   field :blocks, Types::Block.connection_type, null: true do
     description 'All blocked user of the current account.'
   end
