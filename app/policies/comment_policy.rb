@@ -49,12 +49,19 @@ class CommentPolicy < ApplicationPolicy
     def resolve
       return scope if can_administrate?
 
-      scope
-        .where.not(user_id: blocked_users)
-        .not_held
-        .where(hidden_at: nil)
-        .or(scope.where(user_id: user).where.not(hidden_at: nil))
-        .or(scope.where(user_id: user).held)
+      if Flipper[:hide_held].enabled?(user)
+        scope
+          .where.not(user_id: blocked_users)
+          .not_held
+          .where(hidden_at: nil)
+          .or(scope.where(user_id: user).where.not(hidden_at: nil))
+          .or(scope.where(user_id: user).held)
+      else
+        scope
+          .where.not(user_id: blocked_users)
+          .where(hidden_at: nil)
+          .or(scope.where(user_id: user).where.not(hidden_at: nil))
+      end
     end
   end
 end

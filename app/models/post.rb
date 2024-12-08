@@ -33,12 +33,19 @@ class Post < ApplicationRecord
   scope :sfw, -> { where(nsfw: false) }
   scope :in_group, ->(group) { where(target_group: group) }
   scope :visible_for, ->(user) {
-    where(target_group_id: Group.visible_for(user))
-      .or(where(target_group_id: nil))
-      .where(hidden_at: nil)
-      .not_held
-      .or(where(user_id: user).where.not(hidden_at: nil))
-      .or(where(user_id: user).held)
+    if Flipper[:hide_held].enabled?(user)
+      where(target_group_id: Group.visible_for(user))
+        .or(where(target_group_id: nil))
+        .where(hidden_at: nil)
+        .not_held
+        .or(where(user_id: user).where.not(hidden_at: nil))
+        .or(where(user_id: user).held)
+    else
+      where(target_group_id: Group.visible_for(user))
+        .or(where(target_group_id: nil))
+        .where(hidden_at: nil)
+        .or(where(user_id: user).where.not(hidden_at: nil))
+    end
   }
 
   validates :content, :content_formatted, presence: true, unless: :uploads
