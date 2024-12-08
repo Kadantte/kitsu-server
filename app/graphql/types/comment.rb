@@ -2,6 +2,7 @@
 
 class Types::Comment < Types::BaseObject
   implements Types::Interface::WithTimestamps
+  implements Types::Interface::Holdable
 
   description 'A comment on a post'
 

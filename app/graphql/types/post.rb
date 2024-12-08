@@ -2,6 +2,7 @@
 
 class Types::Post < Types::BaseObject
   implements Types::Interface::WithTimestamps
+  implements Types::Interface::Holdable
 
   description 'A post that is visible to your followers and globally in the news-feed.'
 
