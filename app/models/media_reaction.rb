@@ -31,6 +31,10 @@ class MediaReaction < ApplicationRecord
     votes.destroy_all if reaction_changed?
   end
 
+  after_commit if: :saved_change_to_reaction? do
+    SpamfilterWorker.perform(self, :reaction)
+  end
+
   def stream_activity
     user.profile_feed.activities.new(
       progress:,

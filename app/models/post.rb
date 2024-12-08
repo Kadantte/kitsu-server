@@ -141,6 +141,10 @@ class Post < ApplicationRecord
     end
   end
 
+  after_commit if: :saved_change_to_content? do
+    SpamfilterWorker.perform(self, :content)
+  end
+
   before_destroy do
     deletions = reposts.pluck(:user_id, :id).map do |user_id, repost_id|
       [['user', user_id], { foreign_id: "repost:#{repost_id}" }]

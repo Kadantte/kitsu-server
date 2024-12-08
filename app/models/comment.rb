@@ -92,4 +92,8 @@ class Comment < ApplicationRecord
     end
     # PostFollow.create(user: user, post: post)
   end
+
+  after_commit if: :saved_change_to_content? do
+    SpamfilterWorker.perform(self, :content)
+  end
 end
