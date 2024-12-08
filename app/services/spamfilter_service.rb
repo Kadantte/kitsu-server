@@ -11,6 +11,15 @@ class SpamfilterService
     def ham?
       labelName == 'Ham'
     end
+
+    def spamminess
+      if spam?
+        confidence
+      else
+        # Ham has a hamminess score (inverse of spamminess)
+        1.0 - confidence
+      end
+    end
   end
 
   NYCKEL_URL = 'https://www.nyckel.com'
