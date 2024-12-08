@@ -312,6 +312,16 @@ RSpec/ImplicitSubject:
   Enabled: true
 RSpec/Focus:
   AutoCorrect: false
+RSpec/ContextWording:
+  Prefixes:
+    - when
+    - with
+    - without
+    - if
+    - unless
+    - for
+    - 'on'
+  Enabled: true
 Rails/UnknownEnv:
   Environments:
     - production
