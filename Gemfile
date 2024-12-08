@@ -171,14 +171,12 @@ group :test do
   gem 'shoulda-matchers' # it { should(:have_shoulda) }
   gem 'stripe-ruby-mock', github: 'stripe-ruby-mock/stripe-ruby-mock',
     require: 'stripe_mock' # Mock Stripe API
+  gem 'temping' # Temp models+tables
   gem 'timecop' # stop [hammer-]time
   gem 'webmock' # Web faking
 
   # Coverage
   gem 'simplecov' # Local coverage
-
-  # Libraries used to test our API itself
-  gem 'oauth2'
 end
 
 group :production, :staging do

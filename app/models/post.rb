@@ -5,6 +5,7 @@ class Post < ApplicationRecord
   include ContentProcessable
   include ContentEmbeddable
   include Holdable
+  include WithModerationScores
   WordfilterCallbacks.hook(self, :post, :content)
 
   acts_as_paranoid

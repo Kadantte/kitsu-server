@@ -3,6 +3,7 @@
 class MediaReaction < ApplicationRecord
   include WithActivity
   include Holdable
+  include WithModerationScores
   WordfilterCallbacks.hook(self, :reaction, :reaction)
 
   acts_as_paranoid
