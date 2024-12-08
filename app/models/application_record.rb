@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 
@@ -13,6 +15,9 @@ class ApplicationRecord < ActiveRecord::Base
 
   def self.inherited(subclass)
     super(subclass)
+    # Rails admin sucks and crashes if we try to configure an anonymous class
+    # See railsadminteam/rails_admin#3624
+    return if subclass.name.nil?
     subclass.rails_admin do
       edit do
         exclude_fields do |field|
