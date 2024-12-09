@@ -6,7 +6,7 @@ class KitsuSchema < GraphQL::Schema
   mutation Types::MutationType
   query Types::QueryType
 
-  use GraphQL::Schema::Visibility
+  use GraphQL::Schema::Warden
   use GraphQL::Batch
   tracer SentryTracing
 
