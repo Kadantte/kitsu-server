@@ -32,7 +32,7 @@ class MediaReaction < ApplicationRecord
   end
 
   after_commit if: :saved_change_to_reaction? do
-    SpamfilterWorker.perform(self, :reaction)
+    SpamfilterWorker.perform_async(self, content_field: :reaction)
   end
 
   def stream_activity

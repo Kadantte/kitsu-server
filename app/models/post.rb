@@ -142,7 +142,7 @@ class Post < ApplicationRecord
   end
 
   after_commit if: :saved_change_to_content? do
-    SpamfilterWorker.perform(self, :content)
+    SpamfilterWorker.perform_async(self, content_field: :content)
   end
 
   before_destroy do
