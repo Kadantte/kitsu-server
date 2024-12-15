@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_26_080616) do
+ActiveRecord::Schema.define(version: 2024_12_09_030326) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -1852,18 +1852,18 @@ ActiveRecord::Schema.define(version: 2024_11_26_080616) do
       posts.id,
       posts.created_at
      FROM posts
-    WHERE (posts.held_reason IS NOT NULL)
+    WHERE ((posts.held_reason IS NOT NULL) AND (posts.deleted_at IS NULL))
   UNION ALL
    SELECT 'Comment'::text AS type,
       comments.id,
       comments.created_at
      FROM comments
-    WHERE (comments.held_reason IS NOT NULL)
+    WHERE ((comments.held_reason IS NOT NULL) AND (comments.deleted_at IS NULL))
   UNION ALL
    SELECT 'MediaReaction'::text AS type,
       media_reactions.id,
       media_reactions.created_at
      FROM media_reactions
-    WHERE (media_reactions.held_reason IS NOT NULL);
+    WHERE ((media_reactions.held_reason IS NOT NULL) AND (media_reactions.deleted_at IS NULL));
   SQL
 end
