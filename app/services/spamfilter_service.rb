@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
 class SpamfilterService
-  class NyckelError < StandardError; end
-  class NotAuthorizedError < NyckelError; end
-  Result = Struct.new(:labelName, :confidence) do
+  Result = Struct.new(:label, :confidence) do
     def spam?
-      labelName == 'Spam'
+      label == 'Spam'
     end
 
     def ham?
-      labelName == 'Ham'
+      label == 'Ham'
     end
 
     def spamminess
@@ -22,43 +20,21 @@ class SpamfilterService
     end
   end
 
-  NYCKEL_URL = 'https://www.nyckel.com'
-  NYCKEL_FUNCTION = ENV.fetch('NYCKEL_FUNCTION', nil)
+  ENDPOINT_NAME = ENV.fetch('SPAMFILTER_ENDPOINT', nil)
+  CLIENT = Aws::SageMakerRuntime::Client.new(
+    region: ENV.fetch('SPAMFILTER_REGION', nil),
+    access_key_id: ENV.fetch('SPAMFILTER_ACCESS_KEY_ID', nil),
+    secret_access_key: ENV.fetch('SPAMFILTER_SECRET_ACCESS_KEY', nil)
+  )
 
   def self.call(account_age_hours:, content:)
-    Retriable.retriable(
-      on_retry: -> { refresh_token! },
-      on: [NotAuthorizedError]
-    ) do
-      response = HTTP.auth("Bearer #{access_token}").post(
-        "#{NYCKEL_URL}/v1/functions/#{NYCKEL_FUNCTION}/invoke",
-        json: { data: { account_age_hours:, content: } }
-      )
-      body = JSON.parse(response.body.to_s)
+    response = CLIENT.invoke_endpoint(
+      endpoint_name: ENDPOINT_NAME,
+      content_type: 'text/csv',
+      body: CSV.generate_line(account_age_hours, content)
+    )
 
-      raise NotAuthorizedError if response.code == 401
-      raise NyckelError, body.message if response.code != 200
-
-      Result.new(body['labelName'], body['confidence'])
-    end
-  end
-
-  def self.access_token
-    refresh_token! if @access_token.nil? || @access_token.expired?
-
-    @access_token.token
-  end
-
-  def self.refresh_token!
-    @access_token = oauth2.get_token
-  end
-
-  def self.oauth2
-    OAuth2::Client.new(
-      ENV.fetch('NYCKEL_CLIENT_ID', nil),
-      ENV.fetch('NYCKEL_CLIENT_SECRET', nil),
-      site: NYCKEL_URL,
-      token_url: '/connect/token'
-    ).client_credentials
+    label, confidence = CSV.parse_line(response.body.string)
+    Result.new(label, confidence.to_f)
   end
 end
