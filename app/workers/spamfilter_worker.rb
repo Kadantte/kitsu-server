@@ -19,7 +19,7 @@ class SpamfilterWorker
     )
 
     record.update_moderation_scores(
-      scores: { nyckel_spamminess: spamfilter.spamminess },
+      scores: { sagemaker_v1_spamminess: spamfilter.spamminess },
       held_reason: spamfilter.spam? ? :spamfilter : nil
     )
   end
