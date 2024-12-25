@@ -54,6 +54,8 @@ class PostPolicy < ApplicationPolicy
     false
   end
 
+  def unhold? = can_administrate?
+
   class Scope < Scope
     def resolve
       return scope if can_administrate?
