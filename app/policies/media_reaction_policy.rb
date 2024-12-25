@@ -23,6 +23,8 @@ class MediaReactionPolicy < ApplicationPolicy
     record.try(:user) == user || can_administrate?
   end
 
+  def unhold? = can_administrate?
+
   class Scope < Scope
     def resolve
       return scope if can_administrate?
