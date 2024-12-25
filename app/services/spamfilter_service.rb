@@ -31,7 +31,7 @@ class SpamfilterService
     response = CLIENT.invoke_endpoint(
       endpoint_name: ENDPOINT_NAME,
       content_type: 'text/csv',
-      body: CSV.generate_line(account_age_hours, content)
+      body: CSV.generate_line([account_age_hours, content])
     )
 
     label, confidence = CSV.parse_line(response.body.string)
