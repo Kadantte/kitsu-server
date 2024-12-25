@@ -158,4 +158,75 @@ RSpec.describe Directives::SitePermission do
       end
     end
   end
+
+  context 'on a mutation definition' do
+    let!(:object) do
+      Class.new(GraphQL::Schema::Mutation) do
+        graphql_name 'NeedsPermission'
+
+        field :foo, String, null: false
+
+        def resolve = { foo: 'baz' }
+      end
+    end
+
+    before do
+      object.directive described_class, required: 'admin'
+      query_type.field :needs_permission, mutation: object, null: false
+    end
+
+    context 'for somebody with the required permission' do
+      it 'is visible' do
+        expect(schema.to_definition(context: { site_permissions: %w[admin] })).to include(
+          'needsPermission: NeedsPermissionPayload! @sitePermission(required: "admin")'
+        )
+      end
+
+      it 'executes the field' do
+        res = schema.execute('{ needsPermission { foo } }',
+          context: { site_permissions: %w[admin] })
+
+        pp res
+        expect(res['data']['needsPermission']['foo']).to eq('baz')
+      end
+    end
+
+    context 'for somebody without the required permission' do
+      it 'is hidden' do
+        expect(schema.to_definition(context: { site_permissions: [] })).not_to include(
+          'needsPermission: NeedsPermissionPayload!'
+        )
+      end
+
+      it 'says the field does not exist' do
+        result = schema.execute('{ needsPermission { foo } }', context: { site_permissions: [] })
+        expect(result['errors'][0]['message']).to eq(
+          "Field 'needsPermission' doesn't exist on type 'Query'"
+        )
+      end
+    end
+
+    context 'for show_all' do
+      it 'is visible' do
+        expect(schema.to_definition(context: { show_all: true })).to include(
+          'needsPermission: NeedsPermissionPayload! @sitePermission(required: "admin")'
+        )
+      end
+
+      it 'does not execute the field' do
+        executed = false
+        object.define_method(:foo) { executed = true }
+        schema.execute('{ needsPermission { foo } }', context: { show_all: true })
+        expect(executed).to be false
+      end
+
+      it 'returns an error' do
+        object.define_method(:foo) { 'test' }
+        result = schema.execute('{ needsPermission { foo } }', context: { show_all: true })
+        expect(result['errors'][0]['message']).to eq(
+          'Cannot return null for non-nullable field Query.needsPermission'
+        )
+      end
+    end
+  end
 end

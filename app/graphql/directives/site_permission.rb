@@ -30,7 +30,7 @@ class Directives::SitePermission < GraphQL::Schema::Directive
         mod.define_method(:authorized?) do |object, args, context|
           super(object, args, context) && context[:site_permissions]&.include?(required)
         end
-      elsif target < GraphQL::Schema::Object
+      elsif target < GraphQL::Schema::Object || target < GraphQL::Schema::Mutation
         mod.define_method(:authorized?) do |object, context|
           super(object, context) && context[:site_permissions]&.include?(required)
         end
