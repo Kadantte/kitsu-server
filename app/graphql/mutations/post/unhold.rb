@@ -3,7 +3,7 @@
 class Mutations::Post::Unhold < Mutations::Base
   include FancyMutation
 
-  directive Directive::SitePermission, required: 'community_mod'
+  directive Directives::SitePermission, required: 'community_mod'
 
   description 'Mark a held Post as fine, unholding it.'
 

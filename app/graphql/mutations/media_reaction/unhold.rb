@@ -3,7 +3,7 @@
 class Mutations::MediaReaction::Unhold < Mutations::Base
   include FancyMutation
 
-  directive Directive::SitePermission, required: 'community_mod'
+  directive Directives::SitePermission, required: 'community_mod'
 
   description 'Mark a held reaction as fine, unholding it.'
 
