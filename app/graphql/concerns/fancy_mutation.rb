@@ -70,6 +70,12 @@ module FancyMutation
         warnings:,
         errors: [*errors, Types::Errors::WarningsPresent.build]
       }
+    rescue ActiveRecord::RecordInvalid => e
+      {
+        errors: Types::Errors::Validation.for_record(e.record, transform_path: ->(path) {
+          ['input', *path]
+        })
+      }
     rescue ErrorWrapper => e
       { errors: [*errors, e.error] }
     end

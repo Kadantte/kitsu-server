@@ -519,6 +519,27 @@ RSpec.describe FancyMutation do
           errors: [{ __type: Types::Errors::Base }]
         })
       end
+
+      context 'of ActiveRecord::RecordInvalid' do
+        it 'returns the error as Validation error' do
+          mutation = Class.new do
+            include FancyMutation
+
+            def resolve(**)
+              User.create!
+            end
+          end
+
+          result = mutation.new.resolve(input: {})
+          expect(result[:errors]).to include(
+            a_hash_including({
+              __type: Types::Errors::Validation,
+              path: %w[input email],
+              message: "can't be blank"
+            })
+          )
+        end
+      end
     end
   end
 end
