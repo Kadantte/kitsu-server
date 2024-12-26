@@ -12,17 +12,24 @@ class Directives::SitePermission < GraphQL::Schema::Directive
   def initialize(target, required:)
     mod = module_for(target, required:)
     target.singleton_class.include(mod)
-    super
+    super(target, required:)
   end
 
   # Generate the mixin module
   def module_for(target, required:)
+    required = required.to_sym
     Module.new.tap do |mod|
       mod.singleton_class.define_method(:inspect) do
         "#<Directives::SitePermission#module_for(#{target.inspect})>"
       end
 
       mod.define_method(:visible?) do |context|
+        puts '-------'
+        pp 'REQUIRED', required
+        pp 'TARGET', target
+        pp 'CONTEXT', context.to_h
+        pp 'VISIBLE?', context[:site_permissions]&.include?(required)
+        puts '^^^^^^^'
         context[:show_all] || context[:site_permissions]&.include?(required)
       end
 

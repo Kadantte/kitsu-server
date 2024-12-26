@@ -32,14 +32,14 @@ RSpec.describe Directives::SitePermission do
 
     context 'for somebody with the required permission' do
       it 'is visible' do
-        expect(schema.to_definition(context: { site_permissions: %w[admin] })).to include(
+        expect(schema.to_definition(context: { site_permissions: %i[admin] })).to include(
           'needsPermission: String! @sitePermission(required: "admin")'
         )
       end
 
       it 'executes the field' do
         query_type.define_method(:needs_permission) { 'hello' }
-        res = schema.execute('{ needsPermission }', context: { site_permissions: %w[admin] })
+        res = schema.execute('{ needsPermission }', context: { site_permissions: %i[admin] })
         expect(res['data']['needsPermission']).to eq('hello')
       end
     end
@@ -107,7 +107,7 @@ RSpec.describe Directives::SitePermission do
 
     context 'for somebody with the required permission' do
       it 'is visible' do
-        expect(schema.to_definition(context: { site_permissions: %w[admin] })).to include(
+        expect(schema.to_definition(context: { site_permissions: %i[admin] })).to include(
           'type NeedsPermission @sitePermission(required: "admin")'
         )
       end
@@ -115,7 +115,7 @@ RSpec.describe Directives::SitePermission do
       it 'executes the field' do
         object.define_method(:foo) { 'baz' }
         res = schema.execute('{ needsPermission { foo } }',
-          context: { site_permissions: %w[admin] })
+          context: { site_permissions: %i[admin] })
         expect(res['data']['needsPermission']['foo']).to eq('baz')
       end
     end
@@ -177,14 +177,14 @@ RSpec.describe Directives::SitePermission do
 
     context 'for somebody with the required permission' do
       it 'is visible' do
-        expect(schema.to_definition(context: { site_permissions: %w[admin] })).to include(
+        expect(schema.to_definition(context: { site_permissions: %i[admin] })).to include(
           'needsPermission: NeedsPermissionPayload! @sitePermission(required: "admin")'
         )
       end
 
       it 'executes the field' do
         res = schema.execute('{ needsPermission { foo } }',
-          context: { site_permissions: %w[admin] })
+          context: { site_permissions: %i[admin] })
 
         pp res
         expect(res['data']['needsPermission']['foo']).to eq('baz')
