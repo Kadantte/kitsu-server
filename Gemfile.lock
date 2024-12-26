@@ -711,6 +711,9 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
+    simplecov-cobertura (2.1.0)
+      rexml
+      simplecov (~> 0.19)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
     sinatra (3.0.6)
@@ -896,6 +899,7 @@ DEPENDENCIES
   sidekiq-debounce
   sidekiq-scheduler
   simplecov
+  simplecov-cobertura
   sinatra
   sitemap_generator
   spring

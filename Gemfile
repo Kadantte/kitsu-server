@@ -180,6 +180,11 @@ group :test do
   gem 'simplecov' # Local coverage
 end
 
+group :ci do
+  gem 'simplecov-cobertura'
+  gem 'rspec_junit_formatter'
+end
+
 group :production, :staging do
   gem 'puma_worker_killer'
 end

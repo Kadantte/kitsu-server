@@ -1,4 +1,14 @@
+# frozen_string_literal: true
+
 require 'simplecov'
+
+case ENV.fetch('SIMPLECOV_REPORTER', nil)
+when 'cobertura'
+  require 'simplecov-cobertura'
+  SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
+else
+  SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
+end
 
 SimpleCov.start do
   add_filter '/spec/'
