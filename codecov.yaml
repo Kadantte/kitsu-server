@@ -1,0 +1,54 @@
+coverage:
+  status:
+    patch:
+      default:
+        target: 90%
+
+github_checks:
+  annotations: false
+
+comment:
+  layout: "header, diff, flags, components"
+
+component_management:
+  individual_components:
+    - component_id: controllers
+      name: Controllers
+      paths:
+        - app/controllers/**
+    - component_id: models
+      name: Models
+      paths:
+        - app/models/**
+    - component_id: mailers
+      name: Mailers
+      paths:
+        - app/mailers/**
+    - component_id: services
+      name: Services
+      paths:
+        - app/services/**
+    - component_id: workers
+      name: Workers
+      paths:
+        - app/workers/**
+      statuses:
+        - type: patch
+          target: auto
+          threshold: 100%
+    - component_id: policies
+      name: Policies
+      paths:
+        - app/policies/**
+      statuses:
+        - type: patch
+          target: auto
+          threshold: 100%
+    - component_id: graphql
+      name: GraphQL
+      paths:
+        - app/graphql/**
+      statuses:
+        - type: patch
+          target: auto
+          threshold: 90%
