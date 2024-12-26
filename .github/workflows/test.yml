@@ -21,6 +21,7 @@ env:
   SENTRY_ORG: kitsu
   SENTRY_PROJECT: server
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_TOKEN }}
+  SIMPLECOV_REPORTER: cobertura
 
 jobs:
   check_secrets:
