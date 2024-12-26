@@ -45,6 +45,8 @@ class CommentPolicy < ApplicationPolicy
     record.post.target_group
   end
 
+  def unhold? = can_administrate?
+
   class Scope < Scope
     def resolve
       return scope if can_administrate?
