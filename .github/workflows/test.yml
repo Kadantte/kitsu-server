@@ -123,7 +123,7 @@ jobs:
     - name: Run RSpec Suite
       if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
       run: |
-        bundle exec rspec
+        bundle exec rspec --format documentation --format RspecJunitFormatter --out junit.xml
 
     - name: Dump Schema
       run: |
@@ -134,10 +134,19 @@ jobs:
         name: graphql-schema-${{ matrix.ruby }}
         path: schema.graphql
 
-    - name: Publish code coverage
-      uses: paambaati/codeclimate-action@v9.0.0
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v5
       if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
       continue-on-error: true
+      with:
+        token: ${{ secrets.CODECOV_ORG_TOKEN }}
+        slug: hummingbird-me/kitsu-server
+
+    - name: Upload test results to Codecov
+      if: ${{ !cancelled() }}
+      uses: codecov/test-results-action@v1
+      with:
+        token: ${{ secrets.CODECOV_ORG_TOKEN }}
 
   build:
     needs: [check_secrets]
