@@ -24,7 +24,7 @@ class Mutations::Post::Unhold < Mutations::Base
   end
 
   def resolve(**)
-    @post.update!(hidden_at: nil)
+    @post.update!(held_reason: nil)
     @post
   end
 end
