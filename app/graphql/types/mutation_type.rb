@@ -20,6 +20,7 @@ class Types::MutationType < Types::BaseObject
   field :media_reaction, Mutations::MediaReaction, null: false
   field :mapping, Mutations::Mapping, null: false
   field :post, Mutations::Post, null: false
+  field :comment, Mutations::Comment, null: false
   field :wiki_submission, Mutations::WikiSubmission, null: false
   field :profile_link, Mutations::ProfileLink, null: false
 
