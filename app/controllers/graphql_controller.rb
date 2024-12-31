@@ -9,6 +9,7 @@ class GraphqlController < ApplicationController
       token: current_user,
       user: current_user&.resource_owner,
       site_permissions: current_user&.resource_owner&.permissions || [],
+      show_all: request.headers['X-Schema-Visible'] == 'all',
       accept_languages:
     }
     result = KitsuSchema.execute(query,
