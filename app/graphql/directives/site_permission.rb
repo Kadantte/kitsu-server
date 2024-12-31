@@ -24,12 +24,6 @@ class Directives::SitePermission < GraphQL::Schema::Directive
       end
 
       mod.define_method(:visible?) do |context|
-        puts '-------'
-        pp 'REQUIRED', required
-        pp 'TARGET', target
-        pp 'CONTEXT', context.to_h
-        pp 'VISIBLE?', context[:site_permissions]&.include?(required)
-        puts '^^^^^^^'
         context[:show_all] || context[:site_permissions]&.include?(required)
       end
 
