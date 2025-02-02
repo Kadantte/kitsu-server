@@ -10,7 +10,7 @@ class Mutations::MediaReaction::Unhold < Mutations::Base
   input do
     argument :media_reaction_id, ID, required: true
   end
-  result Types::Post
+  result Types::MediaReaction
   errors Types::Errors::NotAuthorized,
     Types::Errors::NotAuthenticated,
     Types::Errors::NotFound
