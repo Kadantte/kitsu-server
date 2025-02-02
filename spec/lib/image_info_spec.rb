@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe ImageInfo do
@@ -10,7 +12,6 @@ RSpec.describe ImageInfo do
       end
 
       it '#animated? should be false' do
-        skip 'Does not work on ImageMagick 6' unless MiniMagick.imagemagick7?
         expect(image).not_to be_animated
       end
     end
