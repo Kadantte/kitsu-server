@@ -47,9 +47,10 @@ class Types::Post < Types::BaseObject
     null: true,
     description: 'The reason why this post was locked.'
 
-  field :held_reason, Types::Enum::HeldReason,
-    null: true,
-    description: 'The reason why this post is held for manual moderator approval.'
+  field :moderation_scores, Types::Map, null: true do
+    directive Directives::SitePermission, required: 'community_mod'
+    description 'The moderation scores for this post.'
+  end
 
   field :comments, Types::Comment.connection_type, null: false do
     description 'All comments on this post'

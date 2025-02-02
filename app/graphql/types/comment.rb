@@ -29,9 +29,10 @@ class Types::Comment < Types::BaseObject
     null: true,
     description: 'The parent comment if this comment was a reply to another.'
 
-  field :held_reason, Types::Enum::HeldReason,
-    null: true,
-    description: 'The reason why this comment is held for manual moderator approval.'
+  field :moderation_scores, Types::Map, null: true do
+    directive Directives::SitePermission, required: 'community_mod'
+    description 'The moderation scores for this post.'
+  end
 
   field :likes, Types::Profile.connection_type, null: false do
     description 'Users who liked this comment'
