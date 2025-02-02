@@ -24,7 +24,7 @@ class Mutations::MediaReaction::Unhold < Mutations::Base
   end
 
   def resolve(**)
-    @reaction.update!(hidden_at: nil)
+    @reaction.update!(held_reason: nil)
     @reaction
   end
 end
