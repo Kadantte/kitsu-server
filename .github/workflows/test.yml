@@ -130,7 +130,7 @@ jobs:
       run: |
         bundle exec rake graphql:dump_schema
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: graphql-schema-${{ matrix.ruby }}
         path: schema.graphql
