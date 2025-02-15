@@ -117,6 +117,9 @@ GEM
       json (>= 1.5.1)
     ancestry (4.3.3)
       activerecord (>= 5.2.6)
+    apollo-federation (3.10.0)
+      google-protobuf (< 5)
+      graphql
     apollo_upload_server (2.1.5)
       actionpack (>= 6.1.6)
       graphql (>= 1.8)
@@ -791,6 +794,7 @@ DEPENDENCIES
   addressable
   algoliasearch-rails
   ancestry
+  apollo-federation
   apollo_upload_server
   attr_encrypted
   aws-sdk-s3 (~> 1)

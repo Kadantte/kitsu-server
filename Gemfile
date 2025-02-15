@@ -63,6 +63,7 @@ gem 'flipper-redis'
 gem 'flipper-ui'
 
 # API Frameworks
+gem 'apollo-federation'
 gem 'graphql'
 gem 'graphql-batch'
 gem 'graphql-fancy_loader'
