@@ -1,4 +1,10 @@
+# frozen_string_literal: true
+
 class Types::Input::Base < GraphQL::Schema::InputObject
+  include ApolloFederation::InputObject
+
+  argument_class Types::BaseArgument
+
   # These need to be unique, so I am forcible doing that.
   # I am thou, and thou art I, but you will always be an input!
   def self.default_graphql_name

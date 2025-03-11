@@ -2,8 +2,11 @@
 
 class Types::BaseObject < GraphQL::Schema::Object
   include HasImageField
+  include ApolloFederation::Object
 
-  connection_type_class(Types::BaseConnection)
+  connection_type_class Types::BaseConnection
+  field_class Types::BaseField
+  underscore_reference_keys true
 
   private
 

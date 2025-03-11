@@ -3,6 +3,9 @@
 class Mutations::Base < GraphQL::Schema::Mutation
   include BehindFeatureFlag
 
+  field_class Types::BaseField
+  argument_class Types::BaseArgument
+
   def current_user
     context[:user]
   end

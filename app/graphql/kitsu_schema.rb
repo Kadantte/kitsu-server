@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class KitsuSchema < GraphQL::Schema
+  include ApolloFederation::Schema
+  federation version: '2.0'
+
   default_max_page_size 2000
 
   mutation Types::MutationType
