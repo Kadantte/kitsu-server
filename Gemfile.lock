@@ -828,6 +828,7 @@ DEPENDENCIES
   friendly_id
   fx
   google-api-client
+  google-protobuf
   graphql
   graphql-batch
   graphql-client

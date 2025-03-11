@@ -81,6 +81,7 @@ gem 'faraday_middleware'
 gem 'fastimage' # Quickly get image sizes
 gem 'friendly_id' # slug-urls-are-cool
 gem 'google-api-client' # Google APIs
+gem 'google-protobuf', force_ruby_platform: RUBY_PLATFORM.include?('linux-musl') # Google Protobuf
 gem 'graphql-client' # make graphql calls
 gem 'http' # Pewpew HTTP calls easier
 gem 'ice_cube', github: 'ice-cube-ruby/ice_cube' # Episode release schedules
@@ -182,8 +183,8 @@ group :test do
 end
 
 group :ci do
-  gem 'simplecov-cobertura'
   gem 'rspec_junit_formatter'
+  gem 'simplecov-cobertura'
 end
 
 group :production, :staging do
