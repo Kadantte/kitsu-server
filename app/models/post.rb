@@ -117,6 +117,28 @@ class Post < ApplicationRecord
     locked_by.present?
   end
 
+  def bump!
+    # update_columns bypasses syncing to Stream, which is good and what we want
+    update_columns(bumped_at: Time.now, updated_at: Time.now)
+  end
+
+  def regenerate_bumped_at!
+    update_columns(<<~SQL.squish)
+      bumped_at = coalesce(
+        (
+          SELECT created_at
+          FROM comments
+          WHERE comments.post_id = posts.id
+            AND comments.parent_id IS NULL
+            AND comments.deleted_at IS NULL
+          -- Use the id to find the newest one quickly
+          ORDER BY id DESC LIMIT 1
+        ),
+        posts.created_at
+      )
+    SQL
+  end
+
   before_save do
     # Always check if the media is NSFW and try to force into NSFWness
     self.nsfw = media.try(:nsfw?) || false unless nsfw

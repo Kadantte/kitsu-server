@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_12_09_030326) do
+ActiveRecord::Schema.define(version: 2025_05_18_064210) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -1243,6 +1243,7 @@ ActiveRecord::Schema.define(version: 2024_12_09_030326) do
     t.datetime "hidden_at"
     t.jsonb "moderation_scores"
     t.integer "held_reason"
+    t.datetime "bumped_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.index ["ao_id"], name: "index_posts_on_ao_id", unique: true
     t.index ["community_recommendation_id"], name: "index_posts_on_community_recommendation_id"
     t.index ["deleted_at"], name: "index_posts_on_deleted_at"

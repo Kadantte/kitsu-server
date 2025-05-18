@@ -85,6 +85,16 @@ class Comment < ApplicationRecord
     self.edited_at = Time.now if content_changed?
     true
   end
+
+  before_create do
+    # Bump the post if this is a top-level comment
+    post.bump! if parent.nil?
+  end
+
+  after_destroy do
+    post.regenerate_bumped_at!
+  end
+
   after_create do
     unless user.feed_completed?
       User.increment_counter(:comments_count, user.id)
