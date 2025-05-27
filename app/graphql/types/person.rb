@@ -8,6 +8,12 @@ class Types::Person < Types::BaseObject
     the creation and localization of media
   DESCRIPTION
 
+  key fields: %w[id]
+
+  def self.resolve_reference(reference, _context)
+    Loaders::UnscopedRecordLoader.for(::Person).load(reference[:id])
+  end
+
   field :id, ID, null: false
 
   field :name, String,

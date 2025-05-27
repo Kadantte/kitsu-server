@@ -6,6 +6,12 @@ class Types::Post < Types::BaseObject
 
   description 'A post that is visible to your followers and globally in the news-feed.'
 
+  key fields: %w[id]
+
+  def self.resolve_reference(reference, context)
+    Loaders::RecordLoader.for(::Post, token: context[:token]).load(reference[:id])
+  end
+
   field :id, ID, null: false
 
   field :author, Types::Profile,

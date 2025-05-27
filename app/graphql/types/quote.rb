@@ -1,7 +1,15 @@
+# frozen_string_literal: true
+
 class Types::Quote < Types::BaseObject
   implements Types::Interface::WithTimestamps
 
   description 'A quote from a media'
+
+  key fields: %w[id]
+
+  def self.resolve_reference(reference, _context)
+    Loaders::UnscopedRecordLoader.for(::Quote).load(reference[:id])
+  end
 
   # Identifiers
   field :id, ID, null: false

@@ -6,6 +6,12 @@ class Types::MediaReaction < Types::BaseObject
 
   description 'A simple review that is 140 characters long expressing how you felt about a media'
 
+  key fields: %w[id]
+
+  def self.resolve_reference(reference, context)
+    Loaders::RecordLoader.for(::MediaReaction, token: context[:token]).load(reference[:id])
+  end
+
   field :id, ID, null: false
 
   field :author, Types::Profile,

@@ -1,7 +1,15 @@
+# frozen_string_literal: true
+
 class Types::Franchise < Types::BaseObject
   implements Types::Interface::WithTimestamps
 
   description 'Related media grouped together'
+
+  key fields: %w[id]
+
+  def self.resolve_reference(reference, _context)
+    Loaders::UnscopedRecordLoader.for(::Franchise).load(reference[:id])
+  end
 
   field :id, ID, null: false
 
@@ -26,7 +34,7 @@ class Types::Franchise < Types::BaseObject
   def installments(sort: [{ on: :release_order, direction: :asc }])
     Loaders::InstallmentsLoader.connection_for({
       find_by: :franchise_id,
-      sort: sort
+      sort:
     }, object.id)
   end
 end

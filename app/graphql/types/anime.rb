@@ -1,7 +1,15 @@
+# frozen_string_literal: true
+
 class Types::Anime < Types::BaseObject
   implements Types::Interface::Media
   implements Types::Interface::Episodic
   implements Types::Interface::WithTimestamps
+
+  key fields: %w[id]
+
+  def self.resolve_reference(reference, _context)
+    Loaders::UnscopedRecordLoader.for(::Anime).load(reference[:id])
+  end
 
   field :subtype, Types::Enum::AnimeSubtype,
     null: false,

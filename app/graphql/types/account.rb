@@ -1,7 +1,18 @@
+# frozen_string_literal: true
+
 class Types::Account < Types::BaseObject
   implements Types::Interface::WithTimestamps
 
   description 'A user account on Kitsu'
+
+  key fields: %w[id]
+
+  def self.resolve_reference(reference, context)
+    # Only resolve the user if the ID matches the current user
+    return nil if context[:user].nil? || context[:user].id.to_s != reference[:id]
+
+    context[:user]
+  end
 
   field :id, ID, null: false
 

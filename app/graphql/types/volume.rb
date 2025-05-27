@@ -1,8 +1,16 @@
+# frozen_string_literal: true
+
 class Types::Volume < Types::BaseObject
   implements Types::Interface::Unit
   implements Types::Interface::WithTimestamps
 
   description 'A manga volume which can contain multiple chapters.'
+
+  key fields: %w[id]
+
+  def self.resolve_reference(reference, _context)
+    Loaders::UnscopedRecordLoader.for(::Volume).load(reference[:id])
+  end
 
   field :published, GraphQL::Types::ISO8601Date,
     null: true,

@@ -3,6 +3,7 @@
 class KitsuSchema < GraphQL::Schema
   include ApolloFederation::Schema
   federation version: '2.0'
+  import_directives %w[tag key shareable]
 
   default_max_page_size 2000
 

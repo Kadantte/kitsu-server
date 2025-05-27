@@ -1,7 +1,15 @@
+# frozen_string_literal: true
+
 class Types::Review < Types::BaseObject
   implements Types::Interface::WithTimestamps
 
   description 'A media review made by a user'
+
+  key fields: %w[id]
+
+  def self.resolve_reference(reference, context)
+    Loaders::RecordLoader.for(::Review, token: context[:token]).load(reference[:id])
+  end
 
   field :id, ID, null: false
 

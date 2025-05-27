@@ -1,8 +1,16 @@
+# frozen_string_literal: true
+
 class Types::Episode < Types::BaseObject
   implements Types::Interface::Unit
   implements Types::Interface::WithTimestamps
 
   description 'An Episode of a Media'
+
+  key fields: %w[id]
+
+  def self.resolve_reference(reference, _context)
+    Loaders::UnscopedRecordLoader.for(::Episode).load(reference[:id])
+  end
 
   field :length, Integer,
     null: true,

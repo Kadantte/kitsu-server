@@ -1,7 +1,15 @@
+# frozen_string_literal: true
+
 class Types::Profile < Types::BaseObject
   implements Types::Interface::WithTimestamps
 
   description 'A user profile on Kitsu'
+
+  key fields: %w[id]
+
+  def self.resolve_reference(reference, context)
+    Loaders::RecordLoader.for(::User, token: context[:token]).load(reference[:id])
+  end
 
   field :id, ID, null: false
 
@@ -89,7 +97,7 @@ class Types::Profile < Types::BaseObject
   def followers(sort: [{ on: :created_at, direction: :desc }])
     Loaders::FollowsLoader.connection_for({
       find_by: :followed_id,
-      sort: sort
+      sort:
     }, object.id).then do |follows|
       Loaders::RecordLoader.for(User, token: context[:token]).load_many(follows.map(&:follower_id))
     end
@@ -103,7 +111,7 @@ class Types::Profile < Types::BaseObject
   def following(sort: [{ on: :created_at, direction: :desc }])
     Loaders::FollowsLoader.connection_for({
       find_by: :follower_id,
-      sort: sort
+      sort:
     }, object.id).then do |follows|
       Loaders::RecordLoader.for(User, token: context[:token]).load_many(follows.map(&:followed_id))
     end
@@ -117,7 +125,7 @@ class Types::Profile < Types::BaseObject
   def posts(sort: [{ on: :created_at, direction: :asc }])
     Loaders::PostsLoader.connection_for({
       find_by: :user_id,
-      sort: sort
+      sort:
     }, object.id)
   end
 
@@ -148,11 +156,11 @@ class Types::Profile < Types::BaseObject
   end
 
   def library_events(kind: nil, sort: [{ on: :created_at, direction: :asc }])
-    filters = { kind: kind }.compact
+    filters = { kind: }.compact
 
     Loaders::LibraryEventsLoader.connection_for({
       find_by: :user_id,
-      sort: sort,
+      sort:,
       where: filters
     }, object.id)
   end
@@ -173,7 +181,7 @@ class Types::Profile < Types::BaseObject
   def media_reactions(sort: [{ on: :created_at, direction: :asc }])
     Loaders::MediaReactionsLoader.connection_for({
       find_by: :user_id,
-      sort: sort
+      sort:
     }, object.id)
   end
 
@@ -197,7 +205,7 @@ class Types::Profile < Types::BaseObject
   def wiki_submissions(statuses: nil, sort: [{ on: :created_at, direction: :asc }])
     Loaders::WikiSubmissionsLoader.connection_for({
       find_by: :user_id,
-      sort: sort,
+      sort:,
       where: { status: statuses }
     }, object.id)
   end
@@ -210,7 +218,7 @@ class Types::Profile < Types::BaseObject
   def reviews(sort: [{ on: :created_at, direction: :asc }])
     Loaders::ReviewsLoader.connection_for({
       find_by: :user_id,
-      sort: sort
+      sort:
     }, object.id)
   end
 end

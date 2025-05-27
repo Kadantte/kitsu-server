@@ -4,6 +4,12 @@ class Types::Manga < Types::BaseObject
   implements Types::Interface::Media
   implements Types::Interface::WithTimestamps
 
+  key fields: %w[id]
+
+  def self.resolve_reference(reference, _context)
+    Loaders::UnscopedRecordLoader.for(::Manga).load(reference[:id])
+  end
+
   field :subtype, Types::Enum::MangaSubtype,
     null: false,
     description: 'A secondary type for categorizing Manga.'

@@ -5,6 +5,12 @@ class Types::Character < Types::BaseObject
 
   description 'Information about a Character in the Kitsu database'
 
+  key fields: %w[id]
+
+  def self.resolve_reference(reference, _context)
+    Loaders::UnscopedRecordLoader.for(::Character).load(reference[:id])
+  end
+
   field :id, ID, null: false
 
   field :slug, String,
