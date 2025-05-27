@@ -118,25 +118,19 @@ class Post < ApplicationRecord
   end
 
   def bump!
-    # update_columns bypasses syncing to Stream, which is good and what we want
+    # We want to bypass validations and callbacks here, so we use update_columns.
+    # rubocop:disable Rails/SkipsModelValidations
     update_columns(bumped_at: Time.now, updated_at: Time.now)
   end
 
   def regenerate_bumped_at!
-    where(id:).update_all(<<~SQL.squish)
-      bumped_at = coalesce(
-        (
-          SELECT created_at
-          FROM comments
-          WHERE comments.post_id = posts.id
-            AND comments.parent_id IS NULL
-            AND comments.deleted_at IS NULL
-          -- Use the id to find the newest one quickly
-          ORDER BY id DESC LIMIT 1
-        ),
-        posts.created_at
-      )
-    SQL
+    # We want to bypass validations and callbacks here, so we use update_columns.
+    update_columns(bumped_at:
+      comments.where(parent_id: nil)
+              .order(id: :desc)
+              .limit(1)
+              .pluck(:created_at) || created_at)
+    # rubocop:enable Rails/SkipsModelValidations
   end
 
   before_save do
