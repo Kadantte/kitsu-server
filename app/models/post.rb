@@ -128,8 +128,7 @@ class Post < ApplicationRecord
     update_columns(bumped_at:
       comments.where(parent_id: nil)
               .order(id: :desc)
-              .limit(1)
-              .pluck(:created_at) || created_at)
+              .pick(:created_at) || created_at)
     # rubocop:enable Rails/SkipsModelValidations
   end
 
