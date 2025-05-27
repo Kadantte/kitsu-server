@@ -123,7 +123,7 @@ class Post < ApplicationRecord
   end
 
   def regenerate_bumped_at!
-    update_columns(<<~SQL.squish)
+    where(id:).update_all(<<~SQL.squish)
       bumped_at = coalesce(
         (
           SELECT created_at
