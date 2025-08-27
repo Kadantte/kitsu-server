@@ -4,7 +4,6 @@ class ApplicationController < JSONAPI::ResourceController
   include PreferredLocale::AutoLocale
   include DoorkeeperHelpers
   include Pundit::ResourceController
-  include MaintainIPAddresses
 
   def base_url
     super + '/api/edge'
