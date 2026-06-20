@@ -107,9 +107,6 @@ gem 'stream_rails', github: 'GetStream/stream-rails',
   branch: 'feature/subreference-enrichment' # Feed Enrichment
 gem 'stream-ruby', '~> 2.10.0' # Feeds
 
-# Cash Money
-gem 'stripe'
-
 # Rack Middleware
 gem 'rack-attack'
 gem 'rack-cors'
@@ -172,8 +169,6 @@ group :test do
   gem 'pundit-matchers' # Test pundit policies
   gem 'rspec-sidekiq' # Test Sidekiq jobs
   gem 'shoulda-matchers' # it { should(:have_shoulda) }
-  gem 'stripe-ruby-mock', github: 'stripe-ruby-mock/stripe-ruby-mock',
-    require: 'stripe_mock' # Mock Stripe API
   gem 'temping' # Temp models+tables
   gem 'timecop' # stop [hammer-]time
   gem 'webmock' # Web faking
